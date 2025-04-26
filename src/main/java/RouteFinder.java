@@ -25,10 +25,10 @@ public class RouteFinder {
     }
 
     private static int estimateDetourTime(Waypoint start, Waypoint supply, Waypoint shelter, Waypoint end) throws Exception {
-        int timeToSupply = WazeClient.getDriveTime(start, supply);
-        int timeToShelter = WazeClient.getDriveTime(supply, shelter);
-        int timeToEnd = WazeClient.getDriveTime(shelter, end);
-        int directTime = WazeClient.getDriveTime(start, end);
+        int timeToSupply = GoogleDistanceMatrixClient.getDriveTimeMinutes(start, supply);
+        int timeToShelter = GoogleDistanceMatrixClient.getDriveTimeMinutes(supply, shelter);
+        int timeToEnd = GoogleDistanceMatrixClient.getDriveTimeMinutes(shelter, end);
+        int directTime = GoogleDistanceMatrixClient.getDriveTimeMinutes(start, end);
 
         return timeToSupply + timeToShelter + timeToEnd - directTime;
     }
