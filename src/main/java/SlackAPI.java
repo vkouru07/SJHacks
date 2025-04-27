@@ -3,7 +3,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class SlackAPI {
-    private static final String WEBHOOK_URL = "https://hooks.slack.com/services/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";
+    private static final String WEBHOOK_URL = ConfigLoader.get("SLACK_WEBHOOK_URL");
 
     public static void sendMessage(String text) {
         try {
@@ -28,7 +28,7 @@ public class SlackAPI {
         }
     }
 
-    public static void main(String args[]){
-        SlackAPI.sendMessage("Hello Driver! You can help!");
+    public static void main(String[] args) {
+        SlackAPI.sendMessage("Hey, slack works!");
     }
 }
