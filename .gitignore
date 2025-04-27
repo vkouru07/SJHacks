@@ -41,3 +41,4 @@ build/
 
 ### Slack ###
 config.properties
+.env

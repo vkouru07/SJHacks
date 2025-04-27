@@ -60,30 +60,28 @@ public class SlackAPI {
         }
     }
 
+    /** Posts a JSON‐formatted payload into the given channel using chat.postMessage */
     public static void postMessageToChannel(String channel, String jsonPayload) {
-    try {
-        URL url = new URL("https://slack.com/api/chat.postMessage");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setDoOutput(true);
-        conn.setRequestProperty("Content-Type",  "application/json");
-        conn.setRequestProperty("Authorization", "Bearer " + BOT_TOKEN);
+        try {
+            URL url = new URL("https://slack.com/api/chat.postMessage");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type",  "application/json");
+            conn.setRequestProperty("Authorization", "Bearer " + BOT_TOKEN);
 
-        // ensure your jsonPayload includes the "text" field
-        // here we inject channel:
-        JsonObject body = JsonParser
-          .parseString(jsonPayload)
-          .getAsJsonObject();
-        body.addProperty("channel", channel);
+            // inject the channel into the payload
+            com.google.gson.JsonObject body = com.google.gson.JsonParser
+                .parseString(jsonPayload)
+                .getAsJsonObject();
+            body.addProperty("channel", channel);
 
-        try (OutputStream os = conn.getOutputStream()) {
-            os.write(body.toString().getBytes("utf-8"));
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(body.toString().getBytes("utf-8"));
+            }
+            System.out.println("chat.postMessage response: " + conn.getResponseCode());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        System.out.println("chat.postMessage response: " + conn.getResponseCode());
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-}
-
 }
