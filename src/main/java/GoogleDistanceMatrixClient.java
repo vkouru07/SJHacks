@@ -2,12 +2,23 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 public class GoogleDistanceMatrixClient {
-    private static final String API_KEY = "YOUR_API_KEY";
+    private static final String API_KEY; // ik this is a bit janky
+    static {
+        try {
+            API_KEY = readApiKeyFromFile("NOT_GOOGLE_MAPS_API_KEY");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static int getDriveTimeMinutes(Waypoint origin, Waypoint destination) throws Exception {
         String urlString = String.format(
@@ -39,4 +50,14 @@ public class GoogleDistanceMatrixClient {
 
         return seconds / 60; // convert to minutes
     }
+
+    private static String readApiKeyFromFile(String key) throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get("src/main/resources/.env"));
+
+        for (String line : lines) {
+            if (line.startsWith(key + "=")) {
+                return line.split("=", 2)[1].trim();
+            }
+        }
+        throw new RuntimeException("Key not found in .env: " + key);    }
 }
