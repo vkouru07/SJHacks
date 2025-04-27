@@ -51,7 +51,7 @@ public class GoogleDistanceMatrixClient {
         return seconds / 60; // convert to minutes
     }
 
-    private static String readApiKeyFromFile(String key) throws IOException {
+    public static String readApiKeyFromFile(String key) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("src/main/resources/.env"));
 
         for (String line : lines) {
